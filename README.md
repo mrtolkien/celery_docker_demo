@@ -10,5 +10,5 @@ Afterwards, you can call Celery from a python interpreter on the same network wi
 ```
 from app.tasks import add
 result = add.delay(4, 4)
-result.get()
+print(result.get())
 ```
