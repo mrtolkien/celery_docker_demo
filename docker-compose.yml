@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+
+  redisinsight:
+    image: redislabs/redisinsight
+    restart: unless-stopped
+    volumes:
+      - redisinsight:/db
+    ports:
+    - 8001:8001
+
+  worker:
+    build:
+      context: .
+    restart: unless-stopped
+    command: celery -A app.tasks worker -l info
+    depends_on:
+      - redis
+
+  # This is where a parent process would be, calling the worker from above with a similar python image
+
+volumes:
+  redis: {}
+  redisinsight: {}
